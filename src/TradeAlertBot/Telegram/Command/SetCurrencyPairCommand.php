@@ -29,9 +29,16 @@ class SetCurrencyPairCommand extends AbstractCommand implements PublicCommandInt
 
     public function execute(BotApi $api, Update $update, array $availableCommands)
     {
+        $userText = $update->getMessage()->getText();
+
+        if ($userText == '123') {
+            return $this->nextCommand;
+        }
+
+
         $api->sendMessage($update->getMessage()->getChat()->getId(), get_class($this));
 
-        return $this->nextCommand;
+        return null;
     }
 
     public function getDescription()
