@@ -7,6 +7,7 @@ namespace ConfigOne\TelegramBotBundle\Telegram\StateMachine;
 use ConfigOne\TelegramBotBundle\Telegram\Command\CommandInterface;
 use ConfigOne\TelegramBotBundle\Telegram\Command\CommandRegistry;
 use Symfony\Component\Workflow\Registry;
+use Symfony\Component\Workflow\Transition;
 
 class CommandStateMachine implements StateMachineInterface
 {
@@ -61,9 +62,20 @@ class CommandStateMachine implements StateMachineInterface
         return $this->commandRegistry->getCommand($this->configuration->findCommand($transition));
     }
 
-    public function getAvailableCommands(): array
+    public function getAvailableCommands(StateMachineSubjectInterface $subject): array
     {
-        return [];
+        $workflow = $this->registry->get($subject);
+        $enabledTransitions = $workflow->getEnabledTransitions($subject);
+        $availableCommands = [];
+
+        /**
+         * @var Transition $transition
+         */
+        foreach ($enabledTransitions as $transition) {
+            $availableCommands[] = $this->getCommandByTransition($transition->getName());
+        }
+
+        return $availableCommands;
     }
 
 }

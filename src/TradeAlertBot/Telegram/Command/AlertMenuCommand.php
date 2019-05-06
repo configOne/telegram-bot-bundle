@@ -6,13 +6,15 @@ namespace ConfigOne\TradeAlertBot\Telegram\Command;
 
 use ConfigOne\TelegramBotBundle\Resolver\ChatUserResolverInterface;
 use ConfigOne\TelegramBotBundle\Telegram\Command\AbstractCommand;
-use ConfigOne\TelegramBotBundle\Telegram\Command\CommandInterface;
+use ConfigOne\TelegramBotBundle\Telegram\Command\CommandListTrait;
 use ConfigOne\TelegramBotBundle\Telegram\Command\PublicCommandInterface;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update;
 
 class AlertMenuCommand extends AbstractCommand implements PublicCommandInterface
 {
+    use CommandListTrait;
+
     /**
      * @var ChatUserResolverInterface
      */
@@ -28,12 +30,13 @@ class AlertMenuCommand extends AbstractCommand implements PublicCommandInterface
         return '/alerts';
     }
 
-    public function execute(BotApi $api, Update $update): ?CommandInterface
+    public function execute(BotApi $api, Update $update, array $availableCommands)
     {
-        $reply = "Alerts Menu.\n Type /new_alert to create one.\n Or type /help to get back to main menu.";
+        $api->sendMessage($update->getMessage()->getChat()->getId(), "Alerts Menu\n");
+        $api->sendMessage($update->getMessage()->getChat()->getId(), "Available commands:\n");
+        $api->sendMessage($update->getMessage()->getChat()->getId(), $this->createCommandList($availableCommands));
 
         $api->sendMessage($update->getMessage()->getChat()->getId(), $reply);
-        return null;
     }
 
     public function getDescription()

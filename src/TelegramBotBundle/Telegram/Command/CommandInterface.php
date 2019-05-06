@@ -12,9 +12,10 @@ interface CommandInterface
     /**
      * @param BotApi $api
      * @param Update $update
-     * @return null|CommandInterface next command to execute
+     * @param CommandInterface[] $availableCommands
+     * @return mixed|CommandInterface next command to execute
      */
-    public function execute(BotApi $api, Update $update): ?CommandInterface;
+    public function execute(BotApi $api, Update $update, array $availableCommands);
 
     /**
      * @param Update $update

@@ -55,7 +55,12 @@ class TelegramUpdatesProcessor
             if ($command->supports($update) && $this->stateMachine->can($command, $currentUser)) {
 
                 $this->stateMachine->apply($command, $currentUser);
-                $nextCommand = $command->execute($this->botApi, $update);
+
+                $nextCommand = $command->execute(
+                    $this->botApi,
+                    $update,
+                    $this->stateMachine->getAvailableCommands($currentUser)
+                );
 
                 $this->handleCommandChain($nextCommand, $update, $currentUser);
                 return;
@@ -65,7 +70,11 @@ class TelegramUpdatesProcessor
         // No command matched the user input.
         // Chances are we're in the middle of a conversation
         // and it's some kind of data so we let the last executed command handle it.
-        $nextCommand = $defaultCommand->execute($this->botApi, $update);
+        $nextCommand = $defaultCommand->execute(
+            $this->botApi,
+            $update,
+            $this->stateMachine->getAvailableCommands($currentUser)
+        );
 
         $this->handleCommandChain($nextCommand, $update, $currentUser);
     }
@@ -74,8 +83,14 @@ class TelegramUpdatesProcessor
     {
         // If there is a next command defined then we're going through the chain
         while ($command instanceof CommandInterface && $this->stateMachine->can($command, $currentUser)) {
+
             $this->stateMachine->apply($command, $currentUser);
-            $command = $command->execute($this->botApi, $update);
+
+            $command = $command->execute(
+                $this->botApi,
+                $update,
+                $this->stateMachine->getAvailableCommands($currentUser)
+            );
         }
     }
 

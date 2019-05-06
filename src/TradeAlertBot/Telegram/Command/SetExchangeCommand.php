@@ -27,7 +27,7 @@ class SetExchangeCommand extends AbstractCommand implements PublicCommandInterfa
         return '/set_exchange';
     }
 
-    public function execute(BotApi $api, Update $update): ?CommandInterface
+    public function execute(BotApi $api, Update $update, array $availableCommands)
     {
 
         $api->sendMessage($update->getMessage()->getChat()->getId(), get_class($this));

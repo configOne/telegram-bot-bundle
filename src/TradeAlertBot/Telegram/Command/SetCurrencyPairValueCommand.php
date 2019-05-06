@@ -27,7 +27,7 @@ class SetCurrencyPairValueCommand extends AbstractCommand implements PublicComma
         return '/set_currency_pair_value';
     }
 
-    public function execute(BotApi $api, Update $update): ?CommandInterface
+    public function execute(BotApi $api, Update $update, array $availableCommands)
     {
         $api->sendMessage($update->getMessage()->getChat()->getId(), get_class($this));
 
