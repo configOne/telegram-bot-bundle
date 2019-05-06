@@ -1,0 +1,74 @@
+services:
+    configone.telegram_bot_api:
+        class: TelegramBot\Api\BotApi
+        arguments:
+            - '%configone_telegram_bot.api.token%'
+            - '%configone_telegram_bot.api.tracker_token%'
+        calls:
+            - ['setProxy', ['%configone_telegram_bot.api.proxy%']]
+
+    configone.event_subscriber.workflow_subscriber:
+        class: ConfigOne\TelegramBotBundle\EventSubscriber\WorkflowSubscriber
+        arguments: ['@configone.telegram.user.repository', '@configone.telegram.state_machine']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    configone.telegram.user.factory:
+        class: ConfigOne\TelegramBotBundle\Factory\ChatUserFactory
+        arguments:
+            - '%configone_telegram_bot.user.class%'
+
+    configone.telegram.user.repository:
+        class: ConfigOne\TelegramBotBundle\Repository\InMemoryRepository
+
+    configone.telegram.user.resolver:
+        class: ConfigOne\TelegramBotBundle\Resolver\ChatUserResolver
+        arguments:
+            - '@configone.telegram.user.repository'
+            - '@configone.telegram.user.factory'
+
+    configone.telegram.state_machine:
+        class: ConfigOne\TelegramBotBundle\Telegram\StateMachine\CommandStateMachine
+        arguments:
+            - '@ConfigOne\TelegramBotBundle\Telegram\StateMachine\StateMachineConfiguration'
+            - '@workflow.registry'
+            - '@ConfigOne\TelegramBotBundle\Telegram\Command\CommandRegistry'
+
+    configone.telegram.update_processor:
+        class: ConfigOne\TelegramBotBundle\Telegram\TelegramUpdatesProcessor
+        arguments:
+            - '@configone.telegram_bot_api'
+            - '@ConfigOne\TelegramBotBundle\Telegram\Command\CommandRegistry'
+            - '@configone.telegram.state_machine'
+            - '@configone.telegram.user.resolver'
+
+    ConfigOne\TelegramBotBundle\Telegram\Command\CommandRegistry: ~
+    ConfigOne\TelegramBotBundle\Telegram\StateMachine\StateMachineConfiguration: ~
+
+    configone.telegram.action.webhook:
+        class: ConfigOne\TelegramBotBundle\Action\WebhookAction
+        tags: ['controller.service_arguments']
+        arguments:
+            - '@configone.telegram.update_processor'
+
+    configone.console.command.webhook_set:
+        class: ConfigOne\TelegramBotBundle\Command\Webhook\SetCommand
+        arguments:
+            - '@configone.telegram_bot_api'
+        tags:
+            - { name: console.command }
+
+
+    configone.console.command.webhook_unset:
+        class: ConfigOne\TelegramBotBundle\Command\Webhook\UnsetCommand
+        arguments:
+            - '@configone.telegram_bot_api'
+        tags:
+            - { name: console.command }
+
+    configone.telegram.command.help:
+        class: ConfigOne\TelegramBotBundle\Telegram\Command\HelpCommand
+        arguments:
+            - '@ConfigOne\TelegramBotBundle\Telegram\Command\CommandRegistry'
+        tags:
+            - { name: configone_telegram_bot.command, default: true}

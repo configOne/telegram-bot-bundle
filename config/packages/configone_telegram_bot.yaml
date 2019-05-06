@@ -1,0 +1,29 @@
+parameters:
+    env(TELEGRAM_BOT_PROXY): ''
+
+configone_telegram_bot:
+    api:
+        token: "%env(TELEGRAM_BOT_TOKEN)%"
+        proxy: "%env(TELEGRAM_BOT_PROXY)%"
+    name: "%env(TELEGRAM_BOT_NAME)%"
+    user:
+        class: ConfigOne\TradeAlertBot\Entity\ChatUser
+
+    state_machine:
+        workflow: trading_bot
+        states:
+            main_menu:
+                command: ConfigOne\TradeAlertBot\Telegram\HelpCommand
+                transition: to_main_menu
+            alert_menu:
+                command: ConfigOne\TradeAlertBot\Telegram\AlertMenuCommand
+                transition: to_alert_menu
+            set_exchange:
+                command: ConfigOne\TradeAlertBot\Telegram\SetExchangeCommand
+                transition: to_set_exchange
+            set_currency_pair:
+                command: ConfigOne\TradeAlertBot\Telegram\SetCurrencyPairCommand
+                transition: to_set_currency_pair
+            set_value:
+                command: ConfigOne\TradeAlertBot\Telegram\SetCurrencyPairValueCommand
+                transition: to_set_value

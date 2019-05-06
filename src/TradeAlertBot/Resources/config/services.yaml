@@ -1,0 +1,19 @@
+services:
+    configone.telegram.command.help:
+        class: ConfigOne\TradeAlertBot\Telegram\Command\HelpCommand
+        arguments:
+            - '@ConfigOne\TelegramBotBundle\Telegram\Command\CommandRegistry'
+        tags:
+            - { name: configone_telegram_bot.command, default: true }
+
+    configone.telegram.command.alerts_menu:
+        class: ConfigOne\TradeAlertBot\Telegram\Command\AlertMenuCommand
+        arguments:
+            - '@configone.telegram.user.resolver'
+        tags:
+            - { name: configone_telegram_bot.command }
+
+    configone.telegram.user.repository:
+        class: ConfigOne\TradeAlertBot\Repository\ChatUserRepository
+
+

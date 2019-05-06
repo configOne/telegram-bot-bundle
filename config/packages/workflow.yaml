@@ -1,0 +1,35 @@
+framework:
+    workflows:
+        trading_bot:
+            type: 'state_machine' # or 'state_machine'
+            audit_trail:
+                enabled: true
+            marking_store:
+                type: 'single_state' # or 'single_state'
+                arguments:
+                    - 'currentCommand'
+            supports:
+                - ConfigOne\TradeAlertBot\Entity\ChatUser
+            initial_place: main_menu
+            places:
+                - main_menu
+                - alert_menu
+                - set_exchange
+                - set_currency_pair
+                - set_value
+            transitions:
+                to_main_menu:
+                    from: [alert_menu, set_exchange, set_currency_pair, set_value]
+                    to:   main_menu
+                to_alert_menu:
+                    from: [main_menu, set_value]
+                    to:   alert_menu
+                to_set_exchange:
+                    from: alert_menu
+                    to:   set_exchange
+                to_set_currency_pair:
+                    from: set_exchange
+                    to:   set_currency_pair
+                to_set_value:
+                    from: set_currency_pair
+                    to:   set_value
