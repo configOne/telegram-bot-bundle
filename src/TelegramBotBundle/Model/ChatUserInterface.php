@@ -9,4 +9,5 @@ use ConfigOne\TelegramBotBundle\Telegram\StateMachine\StateMachineSubjectInterfa
 interface ChatUserInterface extends StateMachineSubjectInterface
 {
     public function getChatId();
+    public function setChatId($chatId);
 }

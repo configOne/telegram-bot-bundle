@@ -43,6 +43,11 @@ class ChatUser implements ChatUserInterface
         return $this->chatId;
     }
 
+    public function setChatId($chatId)
+    {
+        $this->chatId = $chatId;
+    }
+
     public function setId($id): void
     {
         $this->id = $id;

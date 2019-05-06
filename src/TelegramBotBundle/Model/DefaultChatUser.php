@@ -14,6 +14,11 @@ class DefaultChatUser implements ChatUserInterface
         return $this->chatId;
     }
 
+    public function setChatId($chatId)
+    {
+        $this->chatId = $chatId;
+    }
+
     public function getCurrentStateName(): ?string
     {
         return $this->currentCommand;
