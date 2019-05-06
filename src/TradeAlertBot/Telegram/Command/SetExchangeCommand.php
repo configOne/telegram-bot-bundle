@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ConfigOne\TradeAlertBot\Telegram\Command;
 
 use ConfigOne\TelegramBotBundle\Telegram\Command\AbstractCommand;
+use ConfigOne\TelegramBotBundle\Telegram\Command\CommandInterface;
 use ConfigOne\TelegramBotBundle\Telegram\Command\PublicCommandInterface;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update;
@@ -18,12 +19,14 @@ class SetExchangeCommand extends AbstractCommand implements PublicCommandInterfa
 
     public function getName()
     {
-        // TODO: Implement getName() method.
+        return '/set_exchange';
     }
 
-    public function execute(BotApi $api, Update $update)
+    public function execute(BotApi $api, Update $update): ?CommandInterface
     {
-        // TODO: Implement execute() method.
+
+
+        return null;
     }
 
     public function getDescription()

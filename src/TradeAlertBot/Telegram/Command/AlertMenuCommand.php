@@ -30,7 +30,8 @@ class AlertMenuCommand extends AbstractCommand implements PublicCommandInterface
 
     public function execute(BotApi $api, Update $update): ?CommandInterface
     {
-        // TODO: Implement execute() method.
+
+        return null;
     }
 
     public function getDescription()

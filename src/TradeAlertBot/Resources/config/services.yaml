@@ -13,8 +13,19 @@ services:
         tags:
             - { name: configone_telegram_bot.command }
 
+    configone.telegram.command.set_exchange:
+        class: ConfigOne\TradeAlertBot\Telegram\Command\SetExchangeCommand
+        arguments:
+            - '@configone.telegram.user.resolver'
+        tags:
+            - { name: configone_telegram_bot.command }
+
     configone.telegram.user.repository:
         class: ConfigOne\TradeAlertBot\Repository\ChatUserRepository
         arguments: ["@doctrine.orm.entity_manager"]
 
-
+    cconfigone.telegram.command.test:
+        class: ConfigOne\TradeAlertBot\Command\TestCommand
+        arguments: ['@configone.telegram.update_processor']
+        tags:
+            - { name: console.command }
