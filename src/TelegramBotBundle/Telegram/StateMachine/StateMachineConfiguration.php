@@ -28,7 +28,7 @@ class StateMachineConfiguration
         return $this->find($this->getClass($command), self::TRANSITION_KEY);
     }
 
-    public function findCommand(string $transitionOrState)
+    public function findCommand($transitionOrState)
     {
         return $this->find($transitionOrState, self::COMMAND_KEY);
     }
