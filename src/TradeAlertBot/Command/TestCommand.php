@@ -67,7 +67,7 @@ class TestCommand extends Command
 			"type": "private"
 		},
 		"date": 1557128618,
-		"text": "/alerts",
+		"text": "/new_alert",
 		"entities": [
 			{
 				"offset": 0,

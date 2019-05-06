@@ -37,17 +37,8 @@ class HelpCommand extends AbstractCommand implements PublicCommandInterface
 
     public function execute(BotApi $api, Update $update): ?CommandInterface
     {
-        $commands = $this->commandRegistry->getAllCommands();
-        $reply = '';
-        foreach ($commands as $command) {
-
-            if (!$command instanceof PublicCommandInterface) {
-                continue;
-            }
-
-            $reply .= sprintf("%s - %s\n", $command->getName(), $command->getDescription());
-        }
-        $api->sendMessage($update->getMessage()->getChat()->getId(), $reply);
+        $api->sendMessage($update->getMessage()->getChat()->getId(), 'Welcome to Main Menu');
+        $api->sendMessage($update->getMessage()->getChat()->getId(), "Available commands:\n /alerts");
 
         return null;
     }

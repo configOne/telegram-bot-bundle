@@ -12,14 +12,26 @@ use TelegramBot\Api\Types\Update;
 
 class SetCurrencyPairCommand extends AbstractCommand implements PublicCommandInterface
 {
+    /**
+     * @var SetCurrencyPairValueCommand
+     */
+    private $nextCommand;
+
+    public function __construct(SetCurrencyPairValueCommand $nextCommand)
+    {
+        $this->nextCommand = $nextCommand;
+    }
+
     public function getName()
     {
-        // TODO: Implement getName() method.
+        return '/set_currency_pair';
     }
 
     public function execute(BotApi $api, Update $update): ?CommandInterface
     {
-        // TODO: Implement execute() method.
+        $api->sendMessage($update->getMessage()->getChat()->getId(), get_class($this));
+
+        return $this->nextCommand;
     }
 
     public function getDescription()

@@ -18,6 +18,9 @@ configone_telegram_bot:
             alert_menu:
                 command: ConfigOne\TradeAlertBot\Telegram\Command\AlertMenuCommand
                 transition: to_alert_menu
+            create_new_alert:
+                command: ConfigOne\TradeAlertBot\Telegram\Command\NewAlertCommand
+                transition: to_create_new_alert
             set_exchange:
                 command: ConfigOne\TradeAlertBot\Telegram\Command\SetExchangeCommand
                 transition: to_set_exchange

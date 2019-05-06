@@ -30,7 +30,9 @@ class AlertMenuCommand extends AbstractCommand implements PublicCommandInterface
 
     public function execute(BotApi $api, Update $update): ?CommandInterface
     {
+        $reply = "Alerts Menu.\n Type /new_alert to create one.\n Or type /help to get back to main menu.";
 
+        $api->sendMessage($update->getMessage()->getChat()->getId(), $reply);
         return null;
     }
 

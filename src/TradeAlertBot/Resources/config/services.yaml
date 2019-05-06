@@ -13,10 +13,31 @@ services:
         tags:
             - { name: configone_telegram_bot.command }
 
+    configone.telegram.command.new_alert:
+        class: ConfigOne\TradeAlertBot\Telegram\Command\NewAlertCommand
+        arguments:
+            - '@configone.telegram.command.set_exchange'
+        tags:
+            - { name: configone_telegram_bot.command }
+
     configone.telegram.command.set_exchange:
         class: ConfigOne\TradeAlertBot\Telegram\Command\SetExchangeCommand
         arguments:
-            - '@configone.telegram.user.resolver'
+            - '@configone.telegram.command.set_currency_pair'
+        tags:
+            - { name: configone_telegram_bot.command }
+
+    configone.telegram.command.set_currency_pair:
+        class: ConfigOne\TradeAlertBot\Telegram\Command\SetCurrencyPairCommand
+        arguments:
+            - '@configone.telegram.command.set_currency_pair_value'
+        tags:
+            - { name: configone_telegram_bot.command }
+
+    configone.telegram.command.set_currency_pair_value:
+        class: ConfigOne\TradeAlertBot\Telegram\Command\SetCurrencyPairValueCommand
+        arguments:
+            - '@configone.telegram.command.alerts_menu'
         tags:
             - { name: configone_telegram_bot.command }
 

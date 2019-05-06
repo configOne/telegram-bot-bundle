@@ -14,6 +14,7 @@ framework:
             places:
                 - main_menu
                 - alert_menu
+                - create_new_alert
                 - set_exchange
                 - set_currency_pair
                 - set_value
@@ -24,8 +25,11 @@ framework:
                 to_alert_menu:
                     from: [main_menu, set_value]
                     to:   alert_menu
+                to_create_new_alert:
+                    from: [main_menu, alert_menu]
+                    to:   create_new_alert
                 to_set_exchange:
-                    from: alert_menu
+                    from: create_new_alert
                     to:   set_exchange
                 to_set_currency_pair:
                     from: set_exchange
