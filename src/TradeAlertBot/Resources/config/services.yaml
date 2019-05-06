@@ -24,7 +24,7 @@ services:
         class: ConfigOne\TradeAlertBot\Repository\ChatUserRepository
         arguments: ["@doctrine.orm.entity_manager"]
 
-    cconfigone.telegram.command.test:
+    configone.telegram.command.test:
         class: ConfigOne\TradeAlertBot\Command\TestCommand
         arguments: ['@configone.telegram.update_processor']
         tags:
