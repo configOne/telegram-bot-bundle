@@ -34,6 +34,7 @@ class ChatUser implements ChatUserInterface
 
     public function __construct()
     {
+        $this->currentCommand = 'main_menu';
         $this->alerts = new ArrayCollection();
     }
 

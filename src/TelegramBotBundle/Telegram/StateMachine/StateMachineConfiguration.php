@@ -18,22 +18,26 @@ class StateMachineConfiguration
         return $this->workflowName;
     }
 
-    public function getStateName($command)
+    public function getStateName($command): ?string
     {
         return $this->find($this->getClass($command), self::STATE_KEY);
     }
 
-    public function getTransitionName($command)
+    public function getTransitionName($command): ?string
     {
         return $this->find($this->getClass($command), self::TRANSITION_KEY);
     }
 
-    public function findCommand($transitionOrState)
+    public function findCommand($transitionOrState): ?string
     {
-        return $this->find(strval($transitionOrState), self::COMMAND_KEY);
+        if (!is_string($transitionOrState)) {
+            return null;
+        }
+
+        return $this->find($transitionOrState, self::COMMAND_KEY);
     }
 
-    public function loadConfig(array $config)
+    public function loadConfig(array $config): void
     {
         if (!empty($this->statesConfig)) {
             return;
@@ -43,7 +47,7 @@ class StateMachineConfiguration
         $this->statesConfig = $config['states'];
     }
 
-    private function getClass($command)
+    private function getClass($command): string
     {
         if (\is_string($command)) {
             return $command;
@@ -52,7 +56,7 @@ class StateMachineConfiguration
         return get_class($command);
     }
 
-    private function find(string $needle, string $key): string
+    private function find(string $needle, string $key): ?string
     {
         /*
          * ['stateName' => ['command' => 'Some/Command/Class', 'transition' => 'transitionName']];
@@ -65,8 +69,6 @@ class StateMachineConfiguration
             return $data[$key];
         }
 
-        throw new \RuntimeException(
-            sprintf('Value with key "%s" for needle "%s" not found', $key, $needle)
-        );
+        return null;
     }
 }
