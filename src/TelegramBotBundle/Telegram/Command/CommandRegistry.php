@@ -29,9 +29,13 @@ class CommandRegistry
         return $this->commands;
     }
 
-    public function getCommand(?string $className): ?CommandInterface
+    public function getCommand(string $className): CommandInterface
     {
-        return (TRUE === $this->contains($className)) ? $this->commands[$className] : NULL;
+        if (!$this->contains($className)) {
+            throw new \LogicException(sprintf('Command "%s" not found', $className));
+        }
+
+        return $this->commands[$className];
     }
 
     public function addCommand(CommandInterface $command): void
@@ -39,8 +43,12 @@ class CommandRegistry
         $this->commands[get_class($command)] = $command;
     }
 
-    public function getDefaultCommand(): ?CommandInterface
+    public function getDefaultCommand(): CommandInterface
     {
+        if (!$this->defaultCommand) {
+            throw new \LogicException('No default command configured.');
+        }
+
         return $this->defaultCommand;
     }
 
@@ -49,8 +57,8 @@ class CommandRegistry
         $this->defaultCommand = $command;
     }
 
-    public function contains(?string $className): bool
+    public function contains(string $className): bool
     {
-        return in_array($className, $this->commands);
+        return !empty($this->commands[$className]);
     }
 }
