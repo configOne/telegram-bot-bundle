@@ -13,17 +13,17 @@ configone_telegram_bot:
         workflow: trading_bot
         states:
             main_menu:
-                command: ConfigOne\TradeAlertBot\Telegram\HelpCommand
+                command: ConfigOne\TradeAlertBot\Telegram\Command\HelpCommand
                 transition: to_main_menu
             alert_menu:
-                command: ConfigOne\TradeAlertBot\Telegram\AlertMenuCommand
+                command: ConfigOne\TradeAlertBot\Telegram\Command\AlertMenuCommand
                 transition: to_alert_menu
             set_exchange:
-                command: ConfigOne\TradeAlertBot\Telegram\SetExchangeCommand
+                command: ConfigOne\TradeAlertBot\Telegram\Command\SetExchangeCommand
                 transition: to_set_exchange
             set_currency_pair:
-                command: ConfigOne\TradeAlertBot\Telegram\SetCurrencyPairCommand
+                command: ConfigOne\TradeAlertBot\Telegram\Command\SetCurrencyPairCommand
                 transition: to_set_currency_pair
             set_value:
-                command: ConfigOne\TradeAlertBot\Telegram\SetCurrencyPairValueCommand
+                command: ConfigOne\TradeAlertBot\Telegram\Command\SetCurrencyPairValueCommand
                 transition: to_set_value
