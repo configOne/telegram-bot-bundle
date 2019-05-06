@@ -35,8 +35,6 @@ class AlertMenuCommand extends AbstractCommand implements PublicCommandInterface
         $api->sendMessage($update->getMessage()->getChat()->getId(), "Alerts Menu\n");
         $api->sendMessage($update->getMessage()->getChat()->getId(), "Available commands:\n");
         $api->sendMessage($update->getMessage()->getChat()->getId(), $this->createCommandList($availableCommands));
-
-        $api->sendMessage($update->getMessage()->getChat()->getId(), $reply);
     }
 
     public function getDescription()
