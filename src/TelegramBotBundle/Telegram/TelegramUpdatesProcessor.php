@@ -55,8 +55,9 @@ class TelegramUpdatesProcessor
             if ($command->supports($update) && $this->stateMachine->can($command, $currentUser)) {
 
                 $this->stateMachine->apply($command, $currentUser);
-                $command->execute($this->botApi, $update);
+                $nextCommand = $command->execute($this->botApi, $update);
 
+                $this->handleCommandChain($nextCommand, $update, $currentUser);
                 return;
             }
         }
@@ -66,10 +67,16 @@ class TelegramUpdatesProcessor
         // and it's some kind of data so we let the last executed command handle it.
         $nextCommand = $defaultCommand->execute($this->botApi, $update);
 
+        $this->handleCommandChain($nextCommand, $update, $currentUser);
+    }
+
+    private function handleCommandChain($command, Update $update, $currentUser)
+    {
         // If there is a next command defined then we're going through the chain
-        while ($nextCommand instanceof CommandInterface && $this->stateMachine->can($nextCommand, $currentUser)) {
-            $this->stateMachine->apply($nextCommand, $currentUser);
-            $nextCommand = $nextCommand->execute($this->botApi, $update);
+        while ($command instanceof CommandInterface && $this->stateMachine->can($command, $currentUser)) {
+            $this->stateMachine->apply($command, $currentUser);
+            $command = $command->execute($this->botApi, $update);
         }
     }
+
 }
