@@ -28,6 +28,13 @@ class ChatUserResolver implements ChatUserResolverInterface
 
     public function resolve($id): ChatUserInterface
     {
-        return $this->repository->findByChatId($id) ?? $this->factory->createNew();
+        $chatUser = $this->repository->findByChatId($id);
+
+        if (!$chatUser) {
+            $chatUser = $this->factory->createNew();
+            $chatUser->setChatId($id);
+        }
+
+        return $chatUser;
     }
 }
