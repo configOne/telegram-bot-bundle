@@ -8,6 +8,6 @@ use ConfigOne\TelegramBotBundle\Model\ChatUserInterface;
 
 interface ChatUserRepositoryInterface
 {
-    public function find($id): ?ChatUserInterface;
+    public function findByChatId($chatId): ?ChatUserInterface;
     public function save(ChatUserInterface $chatUser);
 }

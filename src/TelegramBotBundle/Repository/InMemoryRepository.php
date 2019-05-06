@@ -13,13 +13,13 @@ class InMemoryRepository implements ChatUserRepositoryInterface
      */
     private $users;
 
-    public function find($id): ?ChatUserInterface
+    public function findByChatId($chatId): ?ChatUserInterface
     {
-        return (!empty($this->users[$id])) ? $this->users[$id] : NULL;
+        return (!empty($this->users[$chatId])) ? $this->users[$chatId] : NULL;
     }
 
     public function save(ChatUserInterface $chatUser): void
     {
-        $this->users[$chatUser->getId()] = $chatUser;
+        $this->users[$chatUser->getChatId()] = $chatUser;
     }
 }

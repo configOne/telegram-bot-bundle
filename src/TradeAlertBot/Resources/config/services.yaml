@@ -15,5 +15,6 @@ services:
 
     configone.telegram.user.repository:
         class: ConfigOne\TradeAlertBot\Repository\ChatUserRepository
+        arguments: ["@doctrine.orm.entity_manager"]
 
 

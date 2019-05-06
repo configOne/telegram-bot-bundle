@@ -6,16 +6,32 @@ namespace ConfigOne\TradeAlertBot\Repository;
 
 use ConfigOne\TelegramBotBundle\Model\ChatUserInterface;
 use ConfigOne\TelegramBotBundle\Repository\ChatUserRepositoryInterface;
+use ConfigOne\TradeAlertBot\Entity\ChatUser;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 
 class ChatUserRepository implements ChatUserRepositoryInterface
 {
-    public function find($id): ?ChatUserInterface
+    /** @var ObjectManager */
+    private $entityManager;
+
+    /** @var EntityRepository */
+    private $repository;
+
+    public function __construct(ObjectManager $entityManager)
     {
-        // TODO: Implement find() method.
+        $this->repository = $entityManager->getRepository(ChatUser::class);
+        $this->entityManager = $entityManager;
+    }
+
+    public function findByChatId($chatId): ?ChatUserInterface
+    {
+        return $this->repository->findOneBy(['chatId' => $chatId]);
     }
 
     public function save(ChatUserInterface $chatUser)
     {
-        // TODO: Implement save() method.
+        $this->entityManager->persist($chatUser);
+        $this->entityManager->flush();
     }
 }
