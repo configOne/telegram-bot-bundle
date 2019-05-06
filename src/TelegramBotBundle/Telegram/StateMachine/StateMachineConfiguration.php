@@ -61,12 +61,14 @@ class StateMachineConfiguration
         /*
          * ['stateName' => ['command' => 'Some/Command/Class', 'transition' => 'transitionName']];
          */
-        foreach ($this->statesConfig as $state => $data) if (in_array($needle, $data)) {
+        foreach ($this->statesConfig as $state => $data) {
 
             //add state name to a temp array to simplify search logic
             $data[self::STATE_KEY] = $state;
 
-            return $data[$key];
+            foreach ($data as $item) if ($item === $needle) {
+                return $data[$key];
+            }
         }
 
         return null;
