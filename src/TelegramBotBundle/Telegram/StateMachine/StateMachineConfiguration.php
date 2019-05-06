@@ -30,7 +30,7 @@ class StateMachineConfiguration
 
     public function findCommand($transitionOrState)
     {
-        return $this->find($transitionOrState, self::COMMAND_KEY);
+        return $this->find(strval($transitionOrState), self::COMMAND_KEY);
     }
 
     public function loadConfig(array $config)
