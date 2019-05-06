@@ -29,7 +29,7 @@ class CommandRegistry
         return $this->commands;
     }
 
-    public function getCommand(string $className): ?CommandInterface
+    public function getCommand(?string $className): ?CommandInterface
     {
         return (TRUE === $this->contains($className)) ? $this->commands[$className] : NULL;
     }
@@ -49,7 +49,7 @@ class CommandRegistry
         $this->defaultCommand = $command;
     }
 
-    public function contains(string $className): bool
+    public function contains(?string $className): bool
     {
         return in_array($className, $this->commands);
     }
