@@ -55,9 +55,13 @@ class TelegramUpdatesProcessor
         foreach ($availableCommands as $command) if ($command->supports($update)) {
 
             $this->stateMachine->apply($command, $currentUser);
-            $nextCommand = $command->execute($this->botApi, $update, $availableCommands);
 
-            $this->handleCommandChain($nextCommand, $update, $currentUser, $availableCommands);
+            $nextCommand = $command->execute(
+                $this->botApi,
+                $update,
+                $this->stateMachine->getAvailableCommands($currentUser));
+
+            $this->handleCommandChain($nextCommand, $update, $currentUser);
             return;
         }
 
@@ -66,15 +70,20 @@ class TelegramUpdatesProcessor
         // and it's some kind of data so we let the last executed command handle it.
         $nextCommand = $currentCommand->execute($this->botApi, $update, $availableCommands);
 
-        $this->handleCommandChain($nextCommand, $update, $currentUser, $availableCommands);
+        $this->handleCommandChain($nextCommand, $update, $currentUser);
     }
 
-    private function handleCommandChain($command, Update $update, $currentUser, array $availableCommands)
+    private function handleCommandChain($command, Update $update, $currentUser)
     {
         // If there is a next command defined then we're going through the chain
         while ($command instanceof CommandInterface && $this->stateMachine->can($command, $currentUser)) {
             $this->stateMachine->apply($command, $currentUser);
-            $command = $command->execute($this->botApi, $update, $availableCommands);
+
+            $command = $command->execute(
+                $this->botApi,
+                $update,
+                $this->stateMachine->getAvailableCommands($currentUser)
+            );
         }
     }
 
