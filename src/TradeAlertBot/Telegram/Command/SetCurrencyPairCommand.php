@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ConfigOne\TradeAlertBot\Telegram\Command;
 
 use ConfigOne\TelegramBotBundle\Telegram\Command\AbstractCommand;
-use ConfigOne\TelegramBotBundle\Telegram\Command\CommandInterface;
 use ConfigOne\TelegramBotBundle\Telegram\Command\PublicCommandInterface;
 use TelegramBot\Api\BotApi;
 use TelegramBot\Api\Types\Update;

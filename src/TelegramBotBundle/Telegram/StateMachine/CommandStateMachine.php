@@ -54,7 +54,9 @@ class CommandStateMachine implements StateMachineInterface
     public function getCurrentCommand(StateMachineSubjectInterface $subject): ?CommandInterface
     {
         $currentState = $subject->getCurrentStateName();
-        return $this->commandRegistry->getCommand($this->configuration->findCommand($currentState));
+        $currentCommand = $this->commandRegistry->getCommand($this->configuration->findCommand($currentState));
+
+        return $currentCommand ?? $this->commandRegistry->getDefaultCommand();
     }
 
     public function getCommandByTransition(string $transition): CommandInterface

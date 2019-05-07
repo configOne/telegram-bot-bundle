@@ -46,52 +46,41 @@ class TelegramUpdatesProcessor
 
     public function processUpdate(Update $update)
     {
-        $chatId = $update->getMessage()->getChat()->getId();
+        $chatId = $this->getChatId($update);
         $currentUser = $this->userResolver->resolve($chatId);
+        $availableCommands = $this->stateMachine->getAvailableCommands($currentUser);
 
-        $defaultCommand = $this->stateMachine->getCurrentCommand($currentUser) ?? $this->commandRegistry->getDefaultCommand();
+        $currentCommand = $this->stateMachine->getCurrentCommand($currentUser);
 
-        foreach ($this->commandRegistry->getAllCommands() as $command) {
-            if ($command->supports($update) && $this->stateMachine->can($command, $currentUser)) {
+        foreach ($availableCommands as $command) if ($command->supports($update)) {
 
-                $this->stateMachine->apply($command, $currentUser);
+            $this->stateMachine->apply($command, $currentUser);
+            $nextCommand = $command->execute($this->botApi, $update, $availableCommands);
 
-                $nextCommand = $command->execute(
-                    $this->botApi,
-                    $update,
-                    $this->stateMachine->getAvailableCommands($currentUser)
-                );
-
-                $this->handleCommandChain($nextCommand, $update, $currentUser);
-                return;
-            }
+            $this->handleCommandChain($nextCommand, $update, $currentUser, $availableCommands);
+            return;
         }
 
         // No command matched the user input.
         // Chances are we're in the middle of a conversation
         // and it's some kind of data so we let the last executed command handle it.
-        $nextCommand = $defaultCommand->execute(
-            $this->botApi,
-            $update,
-            $this->stateMachine->getAvailableCommands($currentUser)
-        );
+        $nextCommand = $currentCommand->execute($this->botApi, $update, $availableCommands);
 
-        $this->handleCommandChain($nextCommand, $update, $currentUser);
+        $this->handleCommandChain($nextCommand, $update, $currentUser, $availableCommands);
     }
 
-    private function handleCommandChain($command, Update $update, $currentUser)
+    private function handleCommandChain($command, Update $update, $currentUser, array $availableCommands)
     {
         // If there is a next command defined then we're going through the chain
         while ($command instanceof CommandInterface && $this->stateMachine->can($command, $currentUser)) {
-
             $this->stateMachine->apply($command, $currentUser);
-
-            $command = $command->execute(
-                $this->botApi,
-                $update,
-                $this->stateMachine->getAvailableCommands($currentUser)
-            );
+            $command = $command->execute($this->botApi, $update, $availableCommands);
         }
+    }
+
+    private function getChatId(Update $update)
+    {
+        return $update->getMessage()->getChat()->getId();
     }
 
 }

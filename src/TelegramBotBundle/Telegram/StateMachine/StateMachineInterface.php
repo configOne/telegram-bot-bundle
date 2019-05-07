@@ -13,5 +13,10 @@ interface StateMachineInterface
 
     public function getCurrentCommand(StateMachineSubjectInterface $subject): ?CommandInterface;
     public function getCommandByTransition(string $transition): CommandInterface;
+
+    /**
+     * @param StateMachineSubjectInterface $subject
+     * @return CommandInterface[]
+     */
     public function getAvailableCommands(StateMachineSubjectInterface $subject): array;
 }
